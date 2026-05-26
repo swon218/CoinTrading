@@ -1,7 +1,7 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const SUPABASE_URL = 'https://lwvrmqwgtyozdiotgfqp.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_fTpAYKLqassiB-z5OItqqw_mYaoLQ1y';
+const SUPABASE_URL = 'https://bakzlcihenpihwijafon.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_c9NN1awpFcf_K6scdsFpKw__qvWHoSi';
 
 export const isSupabaseConfigured = Boolean(
     SUPABASE_URL
