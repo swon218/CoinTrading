@@ -23,7 +23,7 @@ const { getStockInfo, resolveStockCode, searchStocks } = require('./backend/stoc
 const { subscribeRealtime } = require('./backend/realtime');
 const { getKiwoomCredentialsForRequest, saveUserApiCredentials } = require('./backend/userCredentials');
 
-const PORT = Number(process.env.PORT || 3000);
+const PORT = Number(process.env.PORT || 4000);
 
 function parseRequestBody(request) {
     return new Promise((resolve, reject) => {
