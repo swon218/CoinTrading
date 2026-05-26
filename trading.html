@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutoTrading - PC 대시보드</title>
+    <title>CoinTrading - Binance Futures</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -18,12 +18,12 @@
         <i class="fa-solid fa-bars" aria-hidden="true"></i>
     </button>
     <a href="index.html" class="w-64 flex items-center space-x-2 shrink-0 hover:opacity-90 transition-opacity" aria-label="AutoTrading 홈으로 이동">
-        <div class="w-9 h-8 bg-emerald-500 rounded flex items-center justify-center text-slate-900 font-bold text-sm tracking-tight">AT</div>
-        <span class="font-bold text-xl tracking-tight text-white">AutoTrading <span class="text-xs text-emerald-400 ml-1 border border-emerald-400 px-1 py-0.5 rounded">BETA</span></span>
+        <div class="w-9 h-8 bg-emerald-500 rounded flex items-center justify-center text-slate-900 font-bold text-sm tracking-tight">CT</div>
+        <span class="font-bold text-xl tracking-tight text-white">CoinTrading <span class="text-xs text-emerald-400 ml-1 border border-emerald-400 px-1 py-0.5 rounded">BETA</span></span>
     </a>
     
     <div class="relative flex-1 max-w-sm mx-4">
-        <input id="searchBar" type="text" placeholder="종목명 또는 종목코드를 입력하세요" 
+        <input id="searchBar" type="text" placeholder="코인명 또는 심볼을 입력하세요" 
                class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 pr-10 text-sm text-white focus:outline-none focus:border-emerald-500">
         <button id="searchClearButton" type="button" class="search-clear-button" aria-label="검색어 지우기" title="검색어 지우기">
             <i class="fa-solid fa-xmark" aria-hidden="true"></i>
@@ -32,19 +32,19 @@
         <div id="searchModal" class="search-modal">
             <p class="text-xs text-slate-400 mb-2 font-bold">검색 결과</p>
             <div id="searchResults" class="search-results">
-                <div class="search-empty">종목명 또는 종목코드를 입력하세요.</div>
+                <div class="search-empty">코인명 또는 심볼을 입력하세요.</div>
             </div>
             <div class="mb-4">
                 <p class="text-xs text-slate-400 mb-2 font-bold">최근 검색</p>
                 <div class="flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-slate-300">KODEX 미국S&P500</span>
-                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-slate-300">QQQ</span>
+                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-slate-300">BTCUSDT</span>
+                    <span class="px-3 py-1 bg-slate-700 rounded-full text-xs text-slate-300">ETHUSDT</span>
                 </div>
             </div>
             <div class="mb-4">
                 <p class="text-xs text-slate-400 mb-2 font-bold">인기 검색</p>
                 <div class="space-y-1">
-                    <div class="flex justify-between text-sm text-slate-300"><span>1 삼성전자</span><span class="text-blue-500">-0.92%</span></div>
+                    <div class="flex justify-between text-sm text-slate-300"><span>1 BTCUSDT</span><span class="text-emerald-400">Binance Futures</span></div>
                 </div>
             </div>
         </div>
@@ -109,7 +109,7 @@
             <nav class="p-4 space-y-2">
                 <a href="#" class="flex items-center space-x-3 text-emerald-400 bg-slate-700/50 p-3 rounded-lg transition-colors">
                     <i class="fa-solid fa-chart-line text-lg w-6 text-center"></i>
-                    <span class="font-medium hidden md:block">트레이딩 대시보드</span>
+                            <span class="font-medium hidden md:block">선물 트레이딩</span>
                 </a>
                 <a href="strategy.html" class="flex items-center space-x-3 text-slate-400 hover:text-white hover:bg-slate-700 p-3 rounded-lg transition-colors">
                     <i class="fa-solid fa-diagram-project text-lg w-6 text-center"></i>
@@ -157,7 +157,7 @@
                 <div class="main_quote_metrics">
                     <div class="flex flex-col"><span class="text-slate-400">고가</span><span id="stockHigh" class="text-slate-300">-</span></div>
                     <div class="flex flex-col"><span class="text-slate-400">저가</span><span id="stockLow" class="text-slate-300">-</span></div>
-                    <div class="flex flex-col"><span class="text-slate-400">거래량</span><span id="stockVolume">-</span></div>
+                    <div class="flex flex-col"><span class="text-slate-400">24h 거래량</span><span id="stockVolume">-</span></div>
                 </div>
             </section>
 
@@ -182,7 +182,7 @@
                         <button id="chartZoomIn" type="button" title="차트 확대">+</button>
                         <button id="chartZoomOut" type="button" title="차트 축소">-</button>
                     </div>
-                    <div id="chartStatus" class="chart-status">종목을 검색하면 차트가 표시됩니다.</div>
+                    <div id="chartStatus" class="chart-status">코인을 검색하면 Binance 선물 차트가 표시됩니다.</div>
                 </div>
                     
             </section>
@@ -249,7 +249,7 @@
                         <label class="order-field order-field-select order-trade-section">
                             <span>주문 유형</span>
                             <select id="orderTypeSelect">
-                                <option value="regular">정규장 주문</option>
+                                <option value="regular">USDT-M 선물</option>
                             </select>
                         </label>
 
@@ -265,7 +265,7 @@
                             <span></span>
                             <div class="order-stepper">
                                 <input id="orderPriceInput" type="text" inputmode="numeric" autocomplete="off" placeholder="가격 입력">
-                                <span class="order-unit">원</span>
+                                <span class="order-unit">USDT</span>
                                 <button type="button" class="order-price-step-button" data-step-target="price" data-step="-1" aria-label="가격 감소">-</button>
                                 <button type="button" class="order-price-step-button" data-step-target="price" data-step="1" aria-label="가격 증가">+</button>
                             </div>
@@ -275,7 +275,7 @@
                             <label for="orderQuantityInput">수량</label>
                             <div class="order-stepper">
                                 <input id="orderQuantityInput" type="text" inputmode="numeric" autocomplete="off" placeholder="수량 입력">
-                                <span class="order-unit">주</span>
+                                <span class="order-unit">계약</span>
                                 <button type="button" data-step-target="quantity" data-step="-1" aria-label="수량 감소">-</button>
                                 <button type="button" data-step-target="quantity" data-step="1" aria-label="수량 증가">+</button>
                             </div>
@@ -323,6 +323,6 @@
     </div>
 
     <script type="module" src="js/authModal.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <script type="module" src="js/binanceTrading.js"></script>
 </body>
 </html>

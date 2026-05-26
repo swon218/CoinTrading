@@ -22,6 +22,12 @@ const { getHomeRanking } = require('./backend/rankings');
 const { getStockInfo, resolveStockCode, searchStocks } = require('./backend/stocks');
 const { subscribeRealtime } = require('./backend/realtime');
 const { getKiwoomCredentialsForRequest, saveUserApiCredentials } = require('./backend/userCredentials');
+const {
+    getKlines: getBinanceKlines,
+    getTicker: getBinanceTicker,
+    searchFuturesSymbols,
+    subscribeTickerPolling,
+} = require('./backend/binance');
 
 const PORT = Number(process.env.PORT || 4000);
 
@@ -100,6 +106,9 @@ const server = http.createServer(async (request, response) => {
     const stockMatch = requestUrl.pathname.match(/^\/api\/stock\/(.+)$/);
     const chartMatch = requestUrl.pathname.match(/^\/api\/chart\/(.+)$/);
     const realtimeMatch = requestUrl.pathname.match(/^\/api\/realtime\/(.+)$/);
+    const binanceTickerMatch = requestUrl.pathname.match(/^\/api\/binance\/ticker\/(.+)$/);
+    const binanceChartMatch = requestUrl.pathname.match(/^\/api\/binance\/chart\/(.+)$/);
+    const binanceRealtimeMatch = requestUrl.pathname.match(/^\/api\/binance\/realtime\/(.+)$/);
     const strategyMatch = requestUrl.pathname.match(/^\/api\/indicator-strategies\/([^/]+)$/);
 
     if (request.method === 'GET' && requestUrl.pathname === '/api/health') {
@@ -112,6 +121,18 @@ const server = http.createServer(async (request, response) => {
             const query = requestUrl.searchParams.get('q') || '';
             const credentials = await getKiwoomCredentialsForRequest(request, requestUrl);
             const results = await searchStocks(query, 10, credentials);
+            sendJson(response, 200, { results });
+        } catch (error) {
+            sendJson(response, error.statusCode || 500, { message: error.message });
+        }
+        return;
+    }
+
+    if (request.method === 'GET' && requestUrl.pathname === '/api/binance/search') {
+        try {
+            const query = requestUrl.searchParams.get('q') || '';
+            const limit = requestUrl.searchParams.get('limit') || '12';
+            const results = await searchFuturesSymbols(query, limit);
             sendJson(response, 200, { results });
         } catch (error) {
             sendJson(response, error.statusCode || 500, { message: error.message });
@@ -285,6 +306,17 @@ const server = http.createServer(async (request, response) => {
         return;
     }
 
+    if (request.method === 'GET' && binanceTickerMatch) {
+        try {
+            const symbol = decodeURIComponent(binanceTickerMatch[1]);
+            const ticker = await getBinanceTicker(symbol);
+            sendJson(response, 200, ticker);
+        } catch (error) {
+            sendJson(response, error.statusCode || 500, { message: error.message });
+        }
+        return;
+    }
+
     if (request.method === 'GET' && chartMatch) {
         try {
             const query = decodeURIComponent(chartMatch[1]);
@@ -304,11 +336,36 @@ const server = http.createServer(async (request, response) => {
         return;
     }
 
+    if (request.method === 'GET' && binanceChartMatch) {
+        try {
+            const symbol = decodeURIComponent(binanceChartMatch[1]);
+            const chart = await getBinanceKlines(symbol, requestUrl.searchParams.get('interval') || '15m', {
+                limit: requestUrl.searchParams.get('limit'),
+                startTime: requestUrl.searchParams.get('startTime'),
+                endTime: requestUrl.searchParams.get('endTime'),
+            });
+            sendJson(response, 200, chart);
+        } catch (error) {
+            sendJson(response, error.statusCode || 500, { message: error.message });
+        }
+        return;
+    }
+
     if (request.method === 'GET' && realtimeMatch) {
         try {
             const query = decodeURIComponent(realtimeMatch[1]);
             const credentials = await getKiwoomCredentialsForRequest(request, requestUrl);
             await subscribeRealtime(request, response, query, credentials);
+        } catch (error) {
+            sendJson(response, error.statusCode || 500, { message: error.message });
+        }
+        return;
+    }
+
+    if (request.method === 'GET' && binanceRealtimeMatch) {
+        try {
+            const symbol = decodeURIComponent(binanceRealtimeMatch[1]);
+            await subscribeTickerPolling(request, response, symbol);
         } catch (error) {
             sendJson(response, error.statusCode || 500, { message: error.message });
         }
