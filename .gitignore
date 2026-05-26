@@ -2,3 +2,8 @@ data/*.db
 data/*.db-*
 *.log
 __pycache__/
+
+# Local secrets
+.env
+.env.local
+.env.*.local
